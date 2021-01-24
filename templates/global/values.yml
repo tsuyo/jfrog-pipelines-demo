@@ -1,0 +1,33 @@
+Pipeline:
+  name: templates-global-demo
+
+GitRepo:
+  name: tsuyoGitRepoRes
+  gitProvider: tsuyo_github
+  path: tsuyo/jfrog-pipelines-demo
+  branches:
+    include: 'main'
+    # exclude: 'main'
+
+artifactoryIntegration: artifactory
+
+Image:
+  name: helloImageRes
+  sourceRepository: docker
+  # autoPull: false
+
+DockerBuild:
+  name: helloDockerBuildStep
+  dockerImageName: jfrog.tsuyo.org/docker/hello
+  dockerFileName: Dockerfile
+  dockerFileLocation: '.'
+  dockerImageTag: ${run_number}
+
+DockerPush:
+  name: helloDockerPushStep
+  targetRepository: docker
+
+BuildInfo:
+  name: helloBuildInfoRes
+  autoPublishBuildInfo: true
+  # TODO: build number
