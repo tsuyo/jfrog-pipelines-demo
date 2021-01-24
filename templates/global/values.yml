@@ -1,5 +1,5 @@
 Pipeline:
-  name: templates-global-demo
+  name: templates_global_demo
 
 GitRepo:
   name: tsuyoGitRepoRes
