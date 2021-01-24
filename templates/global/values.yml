@@ -18,7 +18,7 @@ Image:
 
 DockerBuild:
   name: helloDockerBuildStep
-  dockerImageName: jfrog.tsuyo.org/docker/hello
+  dockerImageName: kirasoa-docker.jfrog.io/hello
   dockerFileName: Dockerfile
   dockerFileLocation: 'templates/global'
   dockerImageTag: ${run_number}
