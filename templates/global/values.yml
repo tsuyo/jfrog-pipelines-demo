@@ -20,7 +20,7 @@ DockerBuild:
   name: helloDockerBuildStep
   dockerImageName: jfrog.tsuyo.org/docker/hello
   dockerFileName: Dockerfile
-  dockerFileLocation: '.'
+  dockerFileLocation: 'templates/global'
   dockerImageTag: ${run_number}
 
 DockerPush:
