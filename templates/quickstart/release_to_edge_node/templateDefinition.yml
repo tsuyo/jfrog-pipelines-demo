@@ -16,7 +16,7 @@ resources:
       version: beta
  
   # Distribution rules
-  - name: distribution_us_gb
+  - name: {{ .Values.pipelines.name }}_rule
     type: DistributionRule
     configuration:
       sourceDistribution: {{ .Values.distribution }}
