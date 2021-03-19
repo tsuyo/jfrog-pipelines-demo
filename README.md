@@ -1,1 +1,1 @@
-JFrog Pipelines Demo
+JFrog Pipelines System Template Source
