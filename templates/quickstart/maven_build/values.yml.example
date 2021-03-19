@@ -1,0 +1,19 @@
+artifactory: artifactory
+pipelines:
+  name: quickstart_maven_build
+gitRepo:
+  name: github__tsuyo__jfrog_pipelines_quickstart__maven_build
+  path: tsuyo/jfrog-pipelines-quickstart--maven-build
+  provider: tsuyo_github
+artifactoryRepo:
+  resolver:
+    snapshot:
+      name: libs-snapshot
+    release:
+      name: libs-snapshot
+  target:
+    snapshot:
+      name: libs-snapshot
+    release:
+      name: libs-snapshot
+  

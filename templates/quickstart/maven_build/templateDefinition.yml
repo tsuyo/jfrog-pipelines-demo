@@ -1,0 +1,35 @@
+resources:
+  - name: {{ .Values.gitRepo.name }}
+    type: GitRepo
+    configuration:
+      gitProvider: {{ .Values.gitRepo.provider }}
+      path: {{ .Values.gitRepo.path }}
+
+  - name: {{ .Values.pipelines.name }}
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: {{ .Values.artifactory }}
+
+pipelines:
+  - name: {{ .Values.pipelines.name }}
+    steps:
+      - name: mvn_build
+        type: MvnBuild
+        configuration:
+          deployerSnapshotRepo: {{ .Values.artifactoryRepo.resolver.snapshot.name }}
+          deployerReleaseRepo: {{ .Values.artifactoryRepo.resolver.release.name }}
+          resolverSnapshotRepo: {{ .Values.artifactoryRepo.target.snapshot.name }}
+          resolverReleaseRepo: {{ .Values.artifactoryRepo.target.release.name }}
+          inputResources:
+            - name: {{ .Values.gitRepo.name }}
+          integrations:
+            - name: {{ .Values.artifactory }}
+
+      - name: publish_build_info
+        type: PublishBuildInfo
+        configuration:
+          forceXrayScan: false
+          inputSteps:
+            - name: mvn_build
+          outputResources:
+            - name: {{ .Values.pipelines.name }}
