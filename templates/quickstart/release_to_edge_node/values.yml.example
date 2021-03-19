@@ -1,0 +1,7 @@
+artifactory: artifactory
+distribution: distribution
+pipelines:
+  name: quickstart_release_to_edge_node    
+inputBuild:
+  name1: quickstart_go_build
+  name2: quickstart_npm_build

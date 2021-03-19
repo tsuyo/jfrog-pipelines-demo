@@ -1,0 +1,70 @@
+resources: 
+  # release bundle
+  - name: {{ .Values.pipelines.name }}
+    type: ReleaseBundle
+    configuration:
+      sourceDistribution: {{ .Values.distribution }}
+      name: {{ .Values.pipelines.name }}
+      version: beta
+ 
+  # Signed version of the same release bundle
+  - name: signed_{{ .Values.pipelines.name }}
+    type: ReleaseBundle
+    configuration:
+      sourceDistribution: {{ .Values.distribution }}
+      name: {{ .Values.pipelines.name }}
+      version: beta
+ 
+  # Distribution rules
+  - name: distribution_us_gb
+    type: DistributionRule
+    configuration:
+      sourceDistribution: {{ .Values.distribution }}
+      serviceName: "*"
+      siteName: "*"
+      cityName: "*"
+      countryCodes:
+        - "US"
+        - "GB"
+
+
+pipelines:
+  - name: {{ .Values.pipelines.name }}
+    steps:
+      - name: create_release_bundle
+        type: CreateReleaseBundle
+        configuration:
+          releaseBundleName: {{ .Values.pipelines.name }}
+          releaseBundleVersion: beta-${run_number}
+          dryRun: false
+          # sign: false # default
+          description: {{ .Values.pipelines.name }}
+          inputResources:
+            # you can reuse a build info even if a resource definition is not in this pipelines.yml
+            # because this is a global resource
+            - name: {{ .Values.inputBuild.name1 }}
+            # - name: {{ .Values.inputBuild.name2 }}
+          outputResources:
+            - name: {{ .Values.pipelines.name }}
+          # releaseNotes:
+          #   syntax: markdown
+          #   content: |
+          #     ## Heading
+          #       * Bullet
+          #       * Points
+             
+      - name: sign_release_bundle
+        type: SignReleaseBundle
+        configuration:
+          inputResources:
+            - name: {{ .Values.pipelines.name }}
+          outputResources:
+            - name: signed_{{ .Values.pipelines.name }}
+ 
+      - name: distribute_release_bundle
+        type: DistributeReleaseBundle
+        configuration:
+          dryRun: false
+          inputResources:
+            - name: signed_{{ .Values.pipelines.name }}
+            - name: distribution_us_gb
